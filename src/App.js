@@ -1,25 +1,50 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import CoffeeCard from './components/CoffeeCard';
 
 function App() {
+
+  const [data, setData] = useState([])
+
+  let url = `https://api.sampleapis.com/coffee/hot`
+
+  const getData = async () => {
+    await axios.get(url)
+      .then(res => {
+        setData(res.data)
+      })
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <div>
+      <div className="p-5 bg-dark fs-1">
+        <div className="text-light text-center"><b>COFFEE</b></div>
+      </div>
+
+      <div className="container d-flex justify-content-center">
+        <div className="m-3">MORE COFFEE</div>
+      </div>
+
+      <div className="container">
+        {
+          data.map(element => (
+            < div key={element.id} >
+              <CoffeeCard coffee={element} />
+            </div>
+          )
+          )
+        }
+      </div>
+    </div >
+
+  )
 }
 
 export default App;
